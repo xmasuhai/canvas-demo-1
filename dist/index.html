@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/style.e308ff8e.css">
+    <link rel="stylesheet/scss" href="/style.97fcb138.css">
+    <title>画板</title>
+<script src="/style.e308ff8e.js"></script><script src="/style.97fcb138.js"></script></head>
+
+<body>
+    <div id="canvas"></div>
+    <script>canvas.onclick = function (e) {
+  //console.log()调试大法
+  console.log(e.clientX, e.clientY); //创建div 在内存里，并不在页面（文档里）
+
+  var div = document.createElement('div'); //绝对定位
+
+  div.style.position = 'absolute';
+  div.style.left = e.clientX + 'px';
+  div.style.top = e.clientY + 'px'; // div.style.border = '1px solid red'
+
+  div.style.width = '6px';
+  div.style.height = '6px'; //点出现在鼠标中间，而不是右下角
+
+  div.style.marginLeft = '-3px';
+  div.style.marginTop = '-3px'; //由方变圆
+
+  div.style.borderRadius = '50%';
+  div.style.backgroundColor = 'black'; //添加已在内存中创建的节点
+
+  canvas.appendChild(div);
+};</script>
+</body>
+
+</html>

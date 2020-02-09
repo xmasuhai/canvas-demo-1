@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.scss"],"names":[],"mappings":"AAAA;EACI;EACA;EACA;;;AAGJ;EACI;EACA;EACA","file":"style.97fcb138.css","sourceRoot":"..","sourcesContent":["* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\n#canvas {\n    height: 100vh;\n    border: 1px solid red;\n    background-color: lightcoral;\n}"]}
