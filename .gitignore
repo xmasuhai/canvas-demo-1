@@ -1,7 +1,6 @@
-*/dist
-*/.cache
-*/node_modules
+/dist
+/.cache
+/node_modules
 /.DS_Store
-*/.DS_Store
-*/.idea
-*/.vscode
+/.idea
+/.vscode
