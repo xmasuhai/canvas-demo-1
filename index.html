@@ -13,71 +13,172 @@
 <body>
     <!-- <div id="canvas"></div> -->
     <!-- <script>
-        // canvas.onclick = (e) => {
-        //     //console.log()调试大法
-        //     console.log(e.clientX, e.clientY)
-        //         //创建div 在内存里，并不在页面（文档里）
-        //     let div = document.createElement('div')
-        //         //绝对定位
-        //     div.style.position = 'absolute'
-        //     div.style.left = e.clientX + 'px'
-        //     div.style.top = e.clientY + 'px'
-        //         // div.style.border = '1px solid red'
-        //     div.style.width = '6px'
-        //     div.style.height = '6px'
-        //         //点出现在鼠标中间，而不是右下角
-        //     div.style.marginLeft = '-3px'
-        //     div.style.marginTop = '-3px'
-        //         //由方变圆
-        //     div.style.borderRadius = '50%'
-        //     div.style.backgroundColor = 'black'
+        canvas.onclick = (e) => {
+            //console.log()调试大法
+            console.log(e.clientX, e.clientY)
+                //创建div 在内存里，并不在页面（文档里）
+            let div = document.createElement('div')
+                //绝对定位
+            div.style.position = 'absolute'
+            div.style.left = e.clientX + 'px'
+            div.style.top = e.clientY + 'px'
+                // div.style.border = '1px solid red'
+            div.style.width = '6px'
+            div.style.height = '6px'
+                //点出现在鼠标中间，而不是右下角
+            div.style.marginLeft = '-3px'
+            div.style.marginTop = '-3px'
+                //由方变圆
+            div.style.borderRadius = '50%'
+            div.style.backgroundColor = 'black'
 
-        //     //添加已在内存中创建的节点
-        //     canvas.appendChild(div)
+            //添加已在内存中创建的节点
+            canvas.appendChild(div)
         }
     </script> -->
 
     <canvas id='canvas' width="100" height="100"></canvas>
     <script>
-        //设置canvas大小
-        var canvas = document.getElementById("canvas")
-        canvas.width = document.documentElement.clientWidth
-        canvas.height = document.documentElement.clientHeight
+        //面条代码思路
 
-        let painting = false
+        //设置canvas大小
+        let canvas = document.getElementById("canvas");
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        // console.log(document.body.clientWidth)
 
         //样式
-        var ctx = canvas.getContext("2d")
-            //填充色
+        let ctx = canvas.getContext("2d");
+        //填充色
         ctx.fillStyle = "orange";
+        //描边
+        ctx.strokeStyle = 'black';
+        //线粗
+        ctx.lineWidth = 8;
+        //转折处圆润
+        ctx.lineCap = 'round';
+        //加开关标记
+        let painting = false;
+        //记录上次位置
+        let last;
+
+        //抽象一个画线的函数
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        //判断触屏设备
+        let isTouchDevice = 'ontouchstart' in document.documentElement;
+        //console.log(isTouchDevice);//切换控制台PC/触屏模式
+        if (isTouchDevice === true) {
+            // console.log('目前什么也不写');
+
+            //代替onmousedown事件
+            canvas.ontouchstart = (e) => {
+                painting = true;
+                //单指触屏的坐标
+                let x = e.touches[0].clientX;
+                let y = e.touches[0].clientY;
+                last = [x, y];
+            }
+            canvas.ontouchend = () => {
+                painting = false;
+            }
+
+            //监听触屏移动事件
+            canvas.ontouchmove = (e) => {
+
+                if (painting === true) {
+                    // console.log(e.touches[0]);//获取第一个手指
+                    let x = e.touches[0].clientX;
+                    let y = e.touches[0].clientY;
+                    // console.log(x, y)
+
+                    // //以点连线
+                    // ctx.beginPath();
+                    // ctx.arc(x, y, 10, 0, 2 * Math.PI);
+                    // ctx.fill()
+                    // ctx.stroke();
+
+                    //连贯的线
+                    drawLine(last[0], last[1], x, y);
+                    last = [x, y];
+
+                } else {
+                    console.log('什么都不做');
+                }
+            }
+
+        } else {
+
+            // 监听三个鼠标事件
+            //动作
+            canvas.onmousedown = (e) => {
+                painting = true;
+                last = [e.clientX, e.clientY];
+            }
+            canvas.onmouseup = () => {
+                    painting = false;
+                }
+                //画之前需要判断鼠标状态
+            canvas.onmousemove = (e) => {
+                if (painting === true) {
+                    // console.log(e.clientX)
+                    // console.log(e.clientY)
+                    // //矩形
+                    // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10)
+
+                    // //划不连贯的“线”
+                    // ctx.beginPath();
+                    // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+                    // ctx.fill()
+                    // ctx.stroke();
+                    drawLine(last[0], last[1], e.clientX, e.clientY);
+                    last = [e.clientX, e.clientY];
+
+                } else {
+                    console.log('什么都不做');
+                }
+            }
+
+        }
+    </script>
+    <!-- <script>
+        //设置canvas大小
+        let canvas = document.getElementById("canvas");
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        // console.log(document.body.clientWidth)
+
+        //样式
+        let ctx = canvas.getContext("2d");
+        //填充色
+        ctx.fillStyle = "black";
         //描边
         ctx.strokeStyle = 'none';
 
-        //动作
-        canvas.onmousedown = () => {
-            painting = true
+        // //画三角
+        // ctx.beginPath();
+        // ctx.moveTo(0, 0);
+        // ctx.lineTo(500, 500);
+        // ctx.lineTo(0, 500);
+        // ctx.closePath();
+        // ctx.stroke();
+
+        //抽象一个画线的函数
+        function drawLine(x1, x2, y1, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
         }
 
-        canvas.onmousemove = (e) => {
-            if (painting === true) {
-                // console.log(e.clientX)
-                // console.log(e.clientY)
-                // //矩形
-                // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10)
-                ctx.beginPath();
-                ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-                ctx.fill()
-                ctx.stroke();
-            } else {
-                console.log('什么都不做')
-            }
-        }
-        canvas.onmouseup = () => {
-            painting = false
-        }
-
-        // console.log(document.body.clientWidth)
-    </script>
+        let painting = false;
+        let isTouchDevice = 'ontouchstart' in document.documentElement;
+    </script> -->
 </body>
 
 </html>
