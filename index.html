@@ -126,6 +126,11 @@
                 //画之前需要判断鼠标状态
             canvas.onmousemove = (e) => {
                 if (painting === true) {
+                    //
+                    document.body.ontouchmove = (e) => {
+                        e.preventDefault();
+                    }
+
                     // console.log(e.clientX)
                     // console.log(e.clientY)
                     // //矩形
