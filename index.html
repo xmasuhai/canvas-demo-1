@@ -122,20 +122,19 @@
             }
 
         } else {
-            //PC页面
+            // PC页面
             // 监听三个鼠标事件
-            //动作
             canvas.onmousedown = (e) => {
                 painting = true;
                 last = [e.clientX, e.clientY];
             }
             canvas.onmouseup = () => {
-                    painting = false;
-                }
-                //画之前需要判断鼠标状态
-            canvas.onmousemove = (e) => {
-                if (painting === true) {
+                painting = false;
+            }
 
+            canvas.onmousemove = (e) => {
+                //画之前需要判断鼠标状态
+                if (painting === true) {
 
                     // console.log(e.clientX)
                     // console.log(e.clientY)
@@ -147,6 +146,8 @@
                     // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
                     // ctx.fill()
                     // ctx.stroke();
+
+                    //画线 及勿忘更新上次位置
                     drawLine(last[0], last[1], e.clientX, e.clientY);
                     last = [e.clientX, e.clientY];
 
